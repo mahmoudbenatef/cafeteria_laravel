@@ -21,3 +21,6 @@ Route::post('/register',[\App\Http\Controllers\ApiAuthController::class,'registe
 Route::post('/login',[\App\Http\Controllers\ApiAuthController::class,'login']);
 //Route::apiResource('room', \App\Http\Controllers\RoomController::class);
 Route::apiResource('room', 'App\Http\Controllers\RoomController');
+Route::apiResource('product', 'App\Http\Controllers\ProductController');
+
+
