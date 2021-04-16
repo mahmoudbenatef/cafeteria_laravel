@@ -52,6 +52,7 @@ class ApiAuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+
         $user->token = $user->createToken($request->email)->plainTextToken;
         return response()->json(['status' => "success", "message" => "user saved successfully","user"=>$user], 200);
     }
