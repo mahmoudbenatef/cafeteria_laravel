@@ -20,11 +20,14 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('photo');
+            $table->string('ext');
+            $table->boolean('isAdmin')->default(false);
             $table->rememberToken();
+            $table->unsignedBigInteger('room_id');
+            $table->foreign('room_id')->references('id')->on('rooms');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
