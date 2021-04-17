@@ -41,7 +41,9 @@ class ProductController extends Controller
         // validate data
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:products|min:3',
-            'price' => 'required|integer'
+            'price' => 'required|integer',
+            "category_id" => 'required',
+            "photo" => 'required'
         ]);
         // check validator
         if ($validator->fails()) {
@@ -51,8 +53,15 @@ class ProductController extends Controller
             ], 403);
         } else {
             $product = new Product();
+            // upload image
+            $file = $request->file('photo');
+            $name = '/products/' . uniqid() . '.' . $file->extension();
+            $file->storePubliclyAs('public', $name);
+
             $product->name = $request->name;
             $product->price = $request->price;
+            $product->category_id = $request->category_id;
+            $product->photo = $name;
             return $product->save() ?
                 response()->json(['status' => "success", 'data' => $product], 200) :
                 response()->json(['status' => "error", 'message' => 'request failed'], 403);
@@ -67,6 +76,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->category = $product->category;
         return response()->json(["status" => "success", "data" => $product], 200);
     }
 
@@ -103,6 +113,7 @@ class ProductController extends Controller
         } else {
             $product->name = $request->name ? $request->name : $product->name;
             $product->price = $request->price ? $request->price : $product->price;
+            $product->isAvailable = $request->isAvailable ? $request->isAvailable : $product->isAvailable;
             return $product->update() ?
                 response()->json(["status" => "success", "data" => $product], 200) :
                 response()->json(['status' => "error", "message" => "request failed"], 403);

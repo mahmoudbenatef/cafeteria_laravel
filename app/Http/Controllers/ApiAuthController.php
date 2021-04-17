@@ -11,6 +11,7 @@ use Validator;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+
 class ApiAuthController extends Controller
 {
     /**
@@ -27,26 +28,26 @@ class ApiAuthController extends Controller
 */
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-//            'photo' => 'required',
+            //            'photo' => 'required',
             'email' => 'required|unique:users,email',
             'password' => 'required',
             'c_password' => 'required|same:password',
-            'ext'=>'required',
-            'room_id'=>'required',
+            'ext' => 'required',
+            'room_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 200);
         }
 
         $input = $request->all();
-                $date = Carbon::now()->micro;
+        $date = Carbon::now()->micro;
         $user = new User();
-//        if ($request->file('photo')!=null) {
-//            $request->file('photo')->storeAs(
-//                'public/images', $date . '.jpg'
-//            );
-//            $user->photo = $date . '.jpg';
-//        }
+        //        if ($request->file('photo')!=null) {
+        //            $request->file('photo')->storeAs(
+        //                'public/images', $date . '.jpg'
+        //            );
+        //            $user->photo = $date . '.jpg';
+        //        }
         $file = $request->file('photo');
         $name = '/avatars/' . uniqid() . '.' . $file->extension();
         $file->storePubliclyAs('public', $name);
@@ -61,7 +62,8 @@ class ApiAuthController extends Controller
         return response()->json(['status' => "success", 'data' => "", "message" => "user saved successfully"], 200);
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -73,16 +75,15 @@ class ApiAuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json(['status' => "Error", 'data' => "", "message" => ["invalid_credentials"=>"The provided credentials are incorrect"]], 401);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['status' => "Error", 'data' => "", "message" => ["invalid_credentials" => "The provided credentials are incorrect"]], 401);
 
-//            throw ValidationException::withMessages([
-//                'email' => ['.'],
-//            ]);
+            //            throw ValidationException::withMessages([
+            //                'email' => ['.'],
+            //            ]);
         }
 
         $user->token = $user->createToken($request->email)->plainTextToken;
-        return response()->json(['status' => "success", "message" => "user logged in successfully","user"=>new UserResource($user)], 200);
+        return response()->json(['status' => "success", "message" => "user logged in successfully", "user" => new UserResource($user)], 200);
     }
-
 }
