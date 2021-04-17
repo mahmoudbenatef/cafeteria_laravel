@@ -9,6 +9,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Uses;
 use function Illuminate\Support\Facades\Hash;
 use Validator;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 class ApiAuthController extends Controller
 {
@@ -19,9 +20,14 @@ class ApiAuthController extends Controller
      */
     public function register(Request $request)
     {
+        /*
+         *         $fileName = time().'.'.$request->file->getClientOriginalExtension();
+
+
+*/
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'photo' => 'required',
+//            'photo' => 'required',
             'email' => 'required|unique:users,email',
             'password' => 'required',
             'c_password' => 'required|same:password',
@@ -29,14 +35,26 @@ class ApiAuthController extends Controller
             'room_id'=>'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 401);
+            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 200);
         }
+
         $input = $request->all();
+                $date = Carbon::now()->micro;
         $user = new User();
+//        if ($request->file('photo')!=null) {
+//            $request->file('photo')->storeAs(
+//                'public/images', $date . '.jpg'
+//            );
+//            $user->photo = $date . '.jpg';
+//        }
+        $file = $request->file('photo');
+        $name = '/avatars/' . uniqid() . '.' . $file->extension();
+        $file->storePubliclyAs('public', $name);
+
         $user->name = $input['name'];
         $user->ext = $input['ext'];
         $user->email = $input['email'];
-        $user->photo = $input['photo'];
+        $user->photo = $name;
         $user->room_id = $input['room_id'];
         $user->password = Hash::make($input['password']);
         $user->save();

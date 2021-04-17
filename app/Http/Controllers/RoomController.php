@@ -17,8 +17,9 @@ class RoomController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum");
-        $this->middleware("admin");
+        $this->middleware("auth:sanctum")->except("index");
+        $this->middleware("admin")->except("index");
+
     }
 
     public function index()
@@ -48,7 +49,7 @@ class RoomController extends Controller
 
 //        dd($request);
         $validator = Validator::make($request->all(), [
-            'number' => 'required|unique:rooms,number',
+            'number' => 'integer|required|unique:rooms,number',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 401);
