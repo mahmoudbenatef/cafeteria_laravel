@@ -23,3 +23,5 @@ Route::post('/login',[\App\Http\Controllers\ApiAuthController::class,'login']);
 Route::apiResource('room', 'App\Http\Controllers\RoomController');
 Route::apiResource('product', 'App\Http\Controllers\ProductController');
 Route::apiResource('category','App\Http\Controllers\CategoyController');
+Route::apiResource('user','App\Http\Controllers\UserController');
+
