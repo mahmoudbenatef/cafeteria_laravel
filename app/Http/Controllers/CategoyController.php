@@ -37,17 +37,13 @@ class CategoyController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 401);
-        }else {
+        } else {
             $category = new Category();
             $category->name = $request->name;
-            if ($category->save())
-            {
+            if ($category->save()) {
                 return response()->json(['status' => "success", 'data' => $category], 200);
-            }
-            else
-            {
-                return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 401);
-
+            } else {
+                return response()->json(['status' => "Error", 'data' => "", "message" => "something went wrong"], 401);
             }
         }
     }
@@ -83,15 +79,19 @@ class CategoyController extends Controller
      */
     public function destroy($id)
     {
-        $category=Category::where('id','=',$id)->first();
-        
-        
-            if ($category!=null&&$category->delete())
-            {
-                return response()->json(['status' => "success"], 200);
-            }
-       
-            return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 401);  
-        
+        $category = Category::where('id', '=', $id)->first();
+
+
+        if ($category != null && $category->delete()) {
+            return response()->json(['status' => "success"], 200);
+        }
+
+        return response()->json(['status' => "Error", 'data' => "", "message" => "something went wrong"], 401);
+    }
+
+    public function lookUp()
+    {
+        $categories = Category::all(['id', 'name']);
+        return response()->json(['status' => "success", "data" => $categories], 200);
     }
 }

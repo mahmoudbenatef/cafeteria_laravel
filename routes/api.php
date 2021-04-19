@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/register',[\App\Http\Controllers\ApiAuthController::class,'register']);
-Route::post('/login',[\App\Http\Controllers\ApiAuthController::class,'login']);
+Route::post('/register', [\App\Http\Controllers\ApiAuthController::class, 'register']);
+Route::post('/login', [\App\Http\Controllers\ApiAuthController::class, 'login']);
 Route::apiResource('room', 'App\Http\Controllers\RoomController');
 Route::apiResource('product', 'App\Http\Controllers\ProductController');
-Route::apiResource('category','App\Http\Controllers\CategoyController');
+Route::apiResource('category', 'App\Http\Controllers\CategoyController');
+Route::get('categoryLookup', [\App\Http\Controllers\CategoyController::class, 'lookUp']);
