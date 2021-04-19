@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Faker\Core\File;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -12,7 +13,7 @@ class ProductController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     * 
+     *
      */
     public function __construct()
     {
@@ -61,7 +62,8 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->price = $request->price;
             $product->category_id = $request->category_id;
-            $product->photo = $name;
+            $product->photo = asset('storage/'.$name);;
+
             return $product->save() ?
                 response()->json(['status' => "success", 'data' => $product], 200) :
                 response()->json(['status' => "error", 'message' => 'request failed'], 403);
