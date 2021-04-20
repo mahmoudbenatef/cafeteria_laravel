@@ -24,4 +24,6 @@ Route::apiResource('room', 'App\Http\Controllers\RoomController');
 Route::apiResource('order', 'App\Http\Controllers\OrderController');
 Route::apiResource('product', 'App\Http\Controllers\ProductController');
 Route::apiResource('category','App\Http\Controllers\CategoyController');
+Route::apiResource('user','App\Http\Controllers\UserController');
+
 
