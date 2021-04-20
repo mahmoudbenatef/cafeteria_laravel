@@ -84,14 +84,14 @@ class CategoyController extends Controller
     public function destroy($id)
     {
         $category=Category::where('id','=',$id)->first();
-        
-        
+
+
             if ($category!=null&&$category->delete())
             {
                 return response()->json(['status' => "success"], 200);
             }
-       
-            return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 401);  
-        
+
+            return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 401);
+
     }
 }

@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use App\Models\Product;
 
-class Category extends Model
+class OrderItem extends Model
 {
     use HasFactory;
+    protected $table = 'order_items';
 
-    public function products()
-    {
-        return $this->hasMany(Product::class);
-    }
+//    public function products()
+//    {
+//        return $this->hasMany(Product::class);
+//    }
 }
