@@ -16,6 +16,7 @@ class OrderResource extends JsonResource
     {
 
         $orders = [];
+        $orders['id'] = $this->id;
         $orders['created_at'] = $this->created_at;
         $orders['price'] = $this->price;
         $orders['room'] = $this->room->number;
