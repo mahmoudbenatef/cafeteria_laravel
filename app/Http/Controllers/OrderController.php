@@ -110,12 +110,19 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  \App\Models\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Order $order)
     {
-        //
+//        $order = Order::findOrFail($id);
+        $order->status = "delivered";
+        if ($order->update()){
+            return \response()->json(["status" => "success"], 200);
+        } else {
+            return \response()->json(["failed" => "failed"], 500);
+        }
+
     }
 
     /**

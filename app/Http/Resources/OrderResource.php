@@ -21,9 +21,12 @@ class OrderResource extends JsonResource
         $orders['price'] = $this->price;
         $orders['room'] = $this->room->number;
         $orders['user'] = $this->user->name;
+        $orders['ext'] = $this->user->ext;
         $orders['products'] = [];
         $orders['products'] = $this->products->map(function ($product) {
             return [
+                'id' => $product->id,
+                'name' => $product->name,
                 'photo' => $product->photo,
                 'quantity' => $product->pivot->quantity,
             ];
