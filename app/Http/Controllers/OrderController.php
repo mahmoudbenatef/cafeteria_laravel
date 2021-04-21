@@ -24,10 +24,14 @@ class OrderController extends Controller
 
     public function index()
     {
-
 //        return response()->json(['status' => "success", 'data' => Order::all()], 200);
-        return response()->json(['status' => "success", 'data' => OrderResource::collection(Order::all()->where('status', 'running'))], 200);
 
+        $orders = Order::all()->where('status', 'running');
+        if ($orders) {
+            return response()->json(['status' => "success", 'data' => OrderResource::collection($orders)], 200);
+        } else {
+            return response()->json(['status' => "failed"], 400);
+        }
 
     }
 
