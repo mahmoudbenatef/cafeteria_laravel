@@ -15,20 +15,20 @@ class OrderResource extends JsonResource
     public function toArray($request)
     {
 
-        $order = [];
-        $order['created_at'] = $this->created_at;
-        $order['price'] = $this->price;
-        $order['room'] = $this->room->number;
-        $order['user'] = $this->user->name;
-        $order['products'] = [];
-        $order['products'] = $this->products->map(function ($product) {
+        $orders = [];
+        $orders['created_at'] = $this->created_at;
+        $orders['price'] = $this->price;
+        $orders['room'] = $this->room->number;
+        $orders['user'] = $this->user->name;
+        $orders['products'] = [];
+        $orders['products'] = $this->products->map(function ($product) {
             return [
                 'photo' => $product->photo,
                 'quantity' => $product->pivot->quantity,
             ];
         });
 
-        return $order;
+        return $orders;
 
     }
 }
