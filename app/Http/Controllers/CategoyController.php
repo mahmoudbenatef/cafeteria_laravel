@@ -93,5 +93,6 @@ class CategoyController extends Controller
     {
         $categories = Category::all(['id', 'name']);
         return response()->json(['status' => "success", "data" => $categories], 200);
+
     }
 }
