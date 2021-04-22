@@ -24,7 +24,6 @@ class OrderController extends Controller
 
     public function index()
     {
-//        return response()->json(['status' => "success", 'data' => Order::all()], 200);
 
         $orders = Order::all()->where('status', 'running');
         if ($orders) {
@@ -110,17 +109,19 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Models\Order  $order
+     * @param  \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Order $order)
     {
-//        $order = Order::findOrFail($id);
+
         $order->status = "delivered";
-        if ($order->update()){
-            return \response()->json(["status" => "success"], 200);
+        if ($order->update()) {
+            return response()->json(['status' => "success", 'data' => "", "message" => "order updated successfully"], 200);
+
         } else {
-            return \response()->json(["failed" => "failed"], 500);
+            return response()->json(['status' => "Error", 'data' => "", "message" => "could not update order"], 500);
+
         }
 
     }
