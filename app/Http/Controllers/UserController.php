@@ -17,8 +17,8 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except("index");
-        $this->middleware("admin")->except("index");
+        $this->middleware("auth:sanctum");
+        $this->middleware("admin");
 
     }
 
@@ -43,7 +43,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
+
 
     /**
      * Display the specified resource.
@@ -51,7 +51,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -59,7 +59,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
- 
+
     /**
      * Update the specified resource in storage.
      *
@@ -67,7 +67,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-  
+
 
     /**
      * Remove the specified resource from storage.
@@ -75,5 +75,5 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-  
+
 }
