@@ -17,9 +17,8 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-
-        $this->middleware("auth:sanctum")->except("index");
-        $this->middleware("admin")->except("index");
+        $this->middleware("auth:sanctum");
+        $this->middleware("admin")->except("store");
     }
 
     public function index()
@@ -49,28 +48,34 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'products' => 'required',
-            'room' => 'required'
+            'products' => ['required'],
+            'room'=> 'required',
+            'user_id'=>'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 401);
-        } else {
-            $order = new Order();
-            $order->status = "running";
-            $order->notes = $request["notes"];
-            $order->price = $request["price"];
-            $order->room_id = $request["room"];
-            $order->user_id = 2;
-            if ($order->save()) {
-                foreach (json_decode($request["products"], true) as $product) {
-                    $orderItem = new OrderItem();
-                    $orderItem->order_id = $order->id;
-                    $orderItem->product_id = $product["id"];
-                    $orderItem->quantity = $product["quantity"];
-                    $orderItem->save();
-                }
+            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 500);
+        }
+        else if (sizeof(json_decode($request["products"],true))==0){
+            return response()->json(['status' => "Error", 'data' => "", "message" => ["products"=>["order must have products"]]], 500);
+        }
+        else {
+                $order = new Order();
+            $order->status="running";
+            $order->notes=$request["notes"];
+            $order->price=$request["price"];
+            $order->room_id=$request["room"];
+            $order->user_id=$request["user_id"];
+            if ($order->save())
+            {
+            foreach (json_decode($request["products"],true) as $product){
+                $orderItem = new OrderItem();
+                $orderItem->order_id =$order->id;
+                $orderItem->product_id =$product["id"];
+                $orderItem->quantity =$product["quantity"];
+                $orderItem->save();
+            }
+
                 return response()->json(['status' => "done", 'data' => "", "message" => $order], 200);
             }
 //            foreach (json_decode($request["products"],true) as $product){

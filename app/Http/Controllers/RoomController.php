@@ -17,8 +17,8 @@ class RoomController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except("index");
-        $this->middleware("admin")->except("index");
+//        $this->middleware("auth:sanctum")->except("index");
+//        $this->middleware("admin")->except("index");
 
     }
 
