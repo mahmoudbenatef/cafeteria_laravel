@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
-use phpDocumentor\Reflection\DocBlock\Tags\Uses;
-use function Illuminate\Support\Facades\Hash;
-use Validator;
-use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Validator;
+use function Illuminate\Support\Facades\Hash;
 
 class ApiAuthController extends Controller
 {
