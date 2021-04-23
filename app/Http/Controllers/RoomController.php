@@ -6,6 +6,7 @@ use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class RoomController extends Controller
@@ -45,9 +46,6 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-//        dd(Auth::user());
-
-//        dd($request);
         $validator = Validator::make($request->all(), [
             'number' => 'integer|required|unique:rooms,number',
         ]);
@@ -102,7 +100,26 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'number' => 'integer|required|unique:rooms,number,'.$id  ,
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 401);
+        }
+        else {
+            $room =Room::find($id);
+            $room->number = $request->number;
+            if ($room->save())
+            {
+                return response()->json(['status' => "success", 'data' => $room], 200);
+            }
+            else
+            {
+                return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 500);
+            }
+        }
+
+
     }
 
     /**
@@ -113,6 +130,9 @@ class RoomController extends Controller
      */
     public function destroy($id)
     {
+        $users = DB::table('users')
+            ->where('room_id',$id)->count();
+
         //
     }
 }
