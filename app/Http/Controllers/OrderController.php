@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -25,6 +24,8 @@ class OrderController extends Controller
     {
 
         $orders = Order::all()->where('status', 'running');
+
+
         if ($orders) {
             return response()->json(['status' => "success", 'data' => OrderResource::collection($orders)], 200);
         } else {
@@ -50,42 +51,32 @@ class OrderController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'products' => ['required'],
-            'room'=> 'required',
-            'user_id'=>'required',
+            'room' => 'required',
+            'user_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 500);
-        }
-        else if (sizeof(json_decode($request["products"],true))==0){
-            return response()->json(['status' => "Error", 'data' => "", "message" => ["products"=>["order must have products"]]], 500);
-        }
-        else {
-                $order = new Order();
-            $order->status="running";
-            $order->notes=$request["notes"];
-            $order->price=$request["price"];
-            $order->room_id=$request["room"];
-            $order->user_id=$request["user_id"];
-            if ($order->save())
-            {
-            foreach (json_decode($request["products"],true) as $product){
-                $orderItem = new OrderItem();
-                $orderItem->order_id =$order->id;
-                $orderItem->product_id =$product["id"];
-                $orderItem->quantity =$product["quantity"];
-                $orderItem->save();
+        } else if (sizeof(json_decode($request["products"], true)) == 0) {
+            return response()->json(['status' => "Error", 'data' => "", "message" => ["products" => ["order must have products"]]], 500);
+        } else {
+            $order = new Order();
+            $order->status = "running";
+            $order->notes = $request["notes"];
+            $order->price = $request["price"];
+            $order->room_id = $request["room"];
+            $order->user_id = $request["user_id"];
+            $order->save();
+
+            $products = json_decode($request["products"], true);
+
+            foreach ($products as $product) {
+                $order->products()->attach($product["id"], ['quantity' => $product['quantity']]);
             }
 
-                return response()->json(['status' => "done", 'data' => "", "message" => $order], 200);
-            }
-//            foreach (json_decode($request["products"],true) as $product){
-//                $cat = new Category();
-//                $cat->name = $product["name"];
-//                $cat->save();
-//            }
+            return response()->json(['status' => "done", 'data' => "", "message" => $order], 200);
+
         }
 
-        //
     }
 
     /**
@@ -121,6 +112,7 @@ class OrderController extends Controller
     {
 
         $order->status = "delivered";
+
         if ($order->update()) {
             return response()->json(['status' => "success", 'data' => "", "message" => "order updated successfully"], 200);
 
