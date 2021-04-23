@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Faker\Core\File;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
