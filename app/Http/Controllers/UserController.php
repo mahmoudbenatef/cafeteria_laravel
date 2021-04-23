@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +19,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware("auth:sanctum");
-        $this->middleware("admin");
-
+        $this->middleware("admin")->except("getMyOrders","getMyFilteredOrders");
     }
 
     public function index()
@@ -28,6 +28,18 @@ class UserController extends Controller
         return response()->json(['status' => "success", 'data' => UserResource::collection(User::all())], 200);
 
         //
+    }
+
+    public function getMyOrders($id)
+    {
+        $orders = Order::where('user_id', $id)->get();
+        return response()->json(['status' => "success", 'data' => $orders], 200);
+    }
+
+    public function getMyFilteredOrders(Request $request, $id)
+    {
+        $orders = Order::where('user_id', $id)->whereBetween('created_at', [$request->query('from'), $request->query('to')])->get();
+        return response()->json(['status' => 'success', 'data' => $orders], 200);
     }
 
     /**
@@ -75,5 +87,4 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
 }
