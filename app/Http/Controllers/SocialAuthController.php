@@ -16,7 +16,11 @@ class SocialAuthController extends Controller
 {
     public function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->stateless()->redirect();
+        $url= Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+        return response()->json([
+            "url"=>$url
+        ]);
+    
     }
     public function handleProviderCallback($provider)
     {
@@ -28,7 +32,7 @@ class SocialAuthController extends Controller
             $socialUser = new User();               
             $socialUser->name = $user->nickname;
             $socialUser->email = $user->email;
-            $socialUser->password = "12345";
+            $socialUser->password = "1234";
             $socialUser->ext="default";
             $socialUser->room_id=1;
             $socialUser->photo = $user->avatar;
@@ -53,7 +57,6 @@ class SocialAuthController extends Controller
             }
         }
          $appUser->token = $appUser->createToken($appUser->email)->plainTextToken;
-        return response()->json(['status' => "success", "message" => "user logged in successfully", "user" => new UserResource($appUser)], 200);
-       
+        return response()->json(['status' => "success", "message" => "user logged in successfully", "user" => new UserResource($appUser)], 200);       
     }
 }
