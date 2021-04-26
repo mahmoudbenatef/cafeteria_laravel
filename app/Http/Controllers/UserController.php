@@ -19,8 +19,8 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except("getMyOrders","getMyFilteredOrders","index");
-        $this->middleware("admin")->except("getMyOrders","getMyFilteredOrders","index");
+        $this->middleware("auth:sanctum")->except("getMyOrders","getMyFilteredOrders","index","update",);
+        $this->middleware("admin")->except("getMyOrders","getMyFilteredOrders","index","update",);
     }
 
     public function index()
@@ -57,6 +57,43 @@ class UserController extends Controller
         $orders = Order::where('user_id', $id)->whereBetween('created_at', [$request->query('from'), $request->query('to')])->get();
         return response()->json(['status' => 'success', 'data' => $orders], 200);
     }
+
+    public function update(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            //            'photo' => 'required',
+            'email' => 'required|unique:users,email',
+            'password' => 'required',
+            'c_password' => 'required|same:password',
+            'ext' => 'required',
+            'room_id' => 'required',
+        ]);
+        // check validator
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()
+            ], 200);
+        } else {
+            if ($request->hasFile("photo")) {
+                $file = $request->file('photo');
+                $name = 'users/' . uniqid() . '.' . $file->extension();
+                $file->storePubliclyAs('public', $name);
+                $user->photo =  asset('storage/' . ($name));
+            }
+            $user->name = $request->name ? $request->name : $user->name;
+            $user->email = $request->email ? $request->email : $user->email;
+            $user->password = $request->password ? $request->password : $user->password;
+            $user->ext = $request->ext ? $request->ext : $user->ext;
+          
+
+            return $user->update() ?
+                response()->json(["status" => "success", "data" => $user], 200) :
+                response()->json(['status' => "error", "message" => "request failed"], 403);
+        }
+    }
+
 
 
 
