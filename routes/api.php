@@ -25,6 +25,7 @@ Route::apiResource('order', 'App\Http\Controllers\OrderController');
 Route::apiResource('product', 'App\Http\Controllers\ProductController');
 Route::apiResource('category', 'App\Http\Controllers\CategoyController');
 Route::get('categoryLookup', [\App\Http\Controllers\CategoyController::class, 'lookUp']);
-Route::apiResource('user','App\Http\Controllers\UserController');
+Route::apiResource('user', 'App\Http\Controllers\UserController');
 Route::get('user/{id}/orders', [\App\Http\Controllers\UserController::class, 'getMyOrders']);
 Route::get('user/{id}/orders/filter', [\App\Http\Controllers\UserController::class, 'getMyFilteredOrders']);
+Route::get('checks', [\App\Http\Controllers\AdminChecksController::class, 'index']);
