@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -83,7 +84,10 @@ class CategoyController extends Controller
     public function destroy($id)
     {
         $category = Category::where('id', '=', $id)->first();
-
+        $productCount =Product::where('category_id','=',$id)->count();
+        if($productCount>0){
+            return response()->json(['status' => "Error", 'data' => "", "message" => "cannot delete cateogry a prodcut depends on it"], 403);
+        }    
 
         if ($category != null && $category->delete()) {
             return response()->json(['status' => "success"], 200);
