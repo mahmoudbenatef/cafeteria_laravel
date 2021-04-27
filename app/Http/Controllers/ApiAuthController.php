@@ -32,9 +32,10 @@ class ApiAuthController extends Controller
             'c_password' => 'required|same:password',
             'ext' => 'required',
             'room_id' => 'required',
+            'photo'=> 'required'
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 200);
+            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 500);
         }
 
         $input = $request->all();
@@ -71,14 +72,14 @@ class ApiAuthController extends Controller
             'password' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 401);
+            return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 500);
         }
 
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['status' => "Error", 'data' => "", "message" => ["invalid_credentials" => "The provided credentials are incorrect"]], 401);
+            return response()->json(['status' => "Error", 'data' => "inavalid", "message" => ["invalid_credentials" => "The provided credentials are incorrect"]], 401);
 
             //            throw ValidationException::withMessages([
             //                'email' => ['.'],
@@ -86,6 +87,6 @@ class ApiAuthController extends Controller
         }
 
         $user->token = $user->createToken($request->email)->plainTextToken;
-        return response()->json(['status' => "success", "message" => "user logged in successfully", "user" => new UserResource($user)], 200);
+        return response()->json(['status' => "success",'data'=>"there is no data", "message" => "user logged in successfully", "user" => new UserResource($user)], 200);
     }
 }
