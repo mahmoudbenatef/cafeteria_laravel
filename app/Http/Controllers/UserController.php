@@ -6,6 +6,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,8 +17,8 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum");
-        $this->middleware("admin")->except("getMyOrders", "getMyFilteredOrders");
+        $this->middleware("auth:sanctum")->except("getMyOrders","getMyFilteredOrders","index");
+        $this->middleware("admin")->except("getMyOrders","getMyFilteredOrders","index");
     }
 
     public function index()
@@ -26,6 +27,21 @@ class UserController extends Controller
         return response()->json(['status' => "success", 'data' => UserResource::collection(User::all())], 200);
 
         //
+    }
+    public function destroy($id)
+    {
+
+        dump($id) ; 
+        $user=User::where('id','=',$id)->first();
+        
+        
+            if ($user!=null&&$user->delete())
+            {
+                return response()->json(['status' => "success", "data"=> "ay haga"], 200);
+            }
+       
+            return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 401);  
+        
     }
 
     public function getMyOrders($id)
@@ -39,6 +55,8 @@ class UserController extends Controller
         $orders = Order::where('user_id', $id)->whereBetween('created_at', [$request->query('from'), $request->query('to')])->orderBy('created_at', 'desc')->paginate(5);
         return response()->json(['status' => 'success', 'data' => $orders], 200);
     }
+
+
 
     /**
      * Show the form for creating a new resource.

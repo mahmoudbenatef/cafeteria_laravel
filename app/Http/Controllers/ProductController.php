@@ -16,13 +16,22 @@ class ProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except("index");
-        $this->middleware("admin")->except("index");
+        $this->middleware("auth:sanctum")->except("index",'listAllProducts');
+        $this->middleware("admin")->except("index",'listAllProducts');
     }
 
     public function index()
     {
         $products = Product::orderBy('created_at', 'desc')->paginate(5);
+        return response()->json([
+            'status' => 'success',
+            'data' => $products
+        ], 200);
+    }
+
+    public function listAllProducts()
+    {
+        $products = Product::all();
         return response()->json([
             'status' => 'success',
             'data' => $products

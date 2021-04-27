@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="76e15384-48ca-4ca9-86d6-b9dd1f0747c6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/back-end.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/back-end.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiAuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiAuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RoomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RoomController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,6 +134,8 @@
       <path value="$PROJECT_DIR$/vendor/voku/portable-ascii" />
       <path value="$PROJECT_DIR$/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/vendor/league/oauth1-client" />
+      <path value="$PROJECT_DIR$/vendor/laravel/socialite" />
     </include_path>
   </component>
   <component name="ProjectId" id="1rAJ2NCE1jQ5DHNfg781Uxm6DvY" />
@@ -186,6 +188,8 @@
       <workItem from="1619189986140" duration="381000" />
       <workItem from="1619193862448" duration="8790000" />
       <workItem from="1619209973042" duration="9349000" />
+      <workItem from="1619300487104" duration="2220000" />
+      <workItem from="1619345755611" duration="15000" />
     </task>
     <servers />
   </component>

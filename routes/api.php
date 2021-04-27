@@ -21,16 +21,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/register', [\App\Http\Controllers\ApiAuthController::class, 'register']);
 Route::post('/login', [\App\Http\Controllers\ApiAuthController::class, 'login']);
 //social routes
-// Route::middleware(['cors'])->group(function () {
-    Route::get('/authorize/{provider}/redirect', [\App\Http\Controllers\SocialAuthController::class, 'redirectToProvider']); 
+Route::middleware(['cors'])->group(function () {
+    Route::get('/authorize/{provider}/redirect', [\App\Http\Controllers\SocialAuthController::class, 'redirectToProvider']);
     Route::get('/authorize/{provider}/callback', [\App\Http\Controllers\SocialAuthController::class, 'handleProviderCallback']);
-// });
- 
+});
 Route::apiResource('room', 'App\Http\Controllers\RoomController');
 Route::apiResource('order', 'App\Http\Controllers\OrderController');
 Route::apiResource('product', 'App\Http\Controllers\ProductController');
 Route::apiResource('category', 'App\Http\Controllers\CategoyController');
 Route::get('categoryLookup', [\App\Http\Controllers\CategoyController::class, 'lookUp']);
-Route::apiResource('user','App\Http\Controllers\UserController');
+Route::apiResource('user', 'App\Http\Controllers\UserController');
 Route::get('user/{id}/orders', [\App\Http\Controllers\UserController::class, 'getMyOrders']);
 Route::get('user/{id}/orders/filter', [\App\Http\Controllers\UserController::class, 'getMyFilteredOrders']);
+Route::get('checks', [\App\Http\Controllers\AdminChecksController::class, 'index']);
+Route::get('listAllProducts', [\App\Http\Controllers\ProductController::class, 'listAllProducts']);
