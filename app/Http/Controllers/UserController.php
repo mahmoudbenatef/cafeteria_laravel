@@ -31,6 +31,10 @@ class UserController extends Controller
     public function getMyOrders($id)
     {
         $orders = Order::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(5);
+        foreach ($orders as $order) {
+            $order['products'] = $order->products;
+        }
+        // dd($orders);
         return response()->json(['status' => "success", 'data' => $orders], 200);
     }
 
