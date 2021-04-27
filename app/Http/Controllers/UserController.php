@@ -26,10 +26,8 @@ class UserController extends Controller
 
     public function index()
     {
-
-        return response()->json(['status' => "success", 'data' => UserResource::collection(User::all())], 200);
-
-        //
+        $users = User::orderBy('created_at', 'desc')->paginate(5);
+        return response()->json(['status' => "success", 'data' => $users], 200);
     }
     public function destroy($id)
     {
@@ -61,56 +59,10 @@ class UserController extends Controller
         return response()->json(['status' => 'success', 'data' => $orders], 200);
     }
 
-    /*
-    public function update(Request $request, Product $product)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'string|min:3',
-            'price' => 'integer|min:3',
-            'isAvailable' => 'boolean'
-        ]);
-        // check validator
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $validator->errors()
-            ], 200);
-        } else {
-            if ($request->hasFile("photo")) {
-                $file = $request->file('photo');
-                $name = 'products/' . uniqid() . '.' . $file->extension();
-                $file->storePubliclyAs('public', $name);
-                $product->photo =  asset('storage/' . ($name));
-            }
-            $product->name = $request->name ? $request->name : $product->name;
-            $product->price = $request->price ? $request->price : $product->price;
-            $product->isAvailable = $request['isAvailable'] != null ? $request->isAvailable  : $product->isAvailable;
-            return $product->update() ?
-                response()->json(["status" => "success", "data" => $product], 200) :
-                response()->json(['status' => "error", "message" => "request failed"], 403);
-        }
-    }
-    */
-
     public function update(Request $request, User $user)
     {
 
-    //     if ($request->hasFile("photo")) {
-    //         $file = $request->file('photo');
-    //         $name = 'products/' . uniqid() . '.' . $file->extension();
-    //         $file->storePubliclyAs('public', $name);
-    //         $product->photo =  asset('storage/' . ($name));
-    //     }
-    //     $product->name = $request->name ? $request->name : $product->name;
-    //     $product->price = $request->price ? $request->price : $product->price;
-    //     $product->isAvailable = $request['isAvailable'] != null ? $request->isAvailable  : $product->isAvailable;
-    //     return $product->update() ?
-    //         response()->json(["status" => "success", "data" => $product], 200) :
-    //         response()->json(['status' => "error", "message" => "request failed"], 403);
-    // }
-   
         if ($request->hasFile("photo")) {
-            // dd($request->file('photo'));
             $file = $request->file('photo');
             $name = 'avatars/' . uniqid() . '.' . $file->extension();
             $file->storePubliclyAs('public', $name);
@@ -121,10 +73,6 @@ class UserController extends Controller
         $user->password = $request->password  ? Hash::make($request->password) : $user->password;
         $user->ext = $request->ext ? $request->ext : $user->ext;
         $user->room_id = $request->room_id ? $request->room_id : $user->room_id;
-
-
-
-        // error_log($user);
 
         return $user->update() ?
 

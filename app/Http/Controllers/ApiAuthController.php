@@ -56,8 +56,7 @@ class ApiAuthController extends Controller
         $user->ext = $input['ext'];
         $user->email = $input['email'];
         
-
-        $user->photo = asset('storage' . ($name)); 
+        $user->photo = asset('storage/' . ($name));
 
         $user->room_id = $input['room_id'];
         $user->password = Hash::make($input['password']);
