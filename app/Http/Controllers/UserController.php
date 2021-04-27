@@ -8,8 +8,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-use Validator;
-
 class UserController extends Controller
 {
     /**
@@ -48,13 +46,13 @@ class UserController extends Controller
 
     public function getMyOrders($id)
     {
-        $orders = Order::where('user_id', $id)->get();
+        $orders = Order::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(5);
         return response()->json(['status' => "success", 'data' => $orders], 200);
     }
 
     public function getMyFilteredOrders(Request $request, $id)
     {
-        $orders = Order::where('user_id', $id)->whereBetween('created_at', [$request->query('from'), $request->query('to')])->get();
+        $orders = Order::where('user_id', $id)->whereBetween('created_at', [$request->query('from'), $request->query('to')])->orderBy('created_at', 'desc')->paginate(5);
         return response()->json(['status' => 'success', 'data' => $orders], 200);
     }
 
