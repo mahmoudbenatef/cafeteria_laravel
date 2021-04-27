@@ -31,7 +31,7 @@ class ProductController extends Controller
 
     public function listAllProducts()
     {
-        $products = Product::all();
+        $products = Product::where('isAvailable','=','1')->get();
         return response()->json([
             'status' => 'success',
             'data' => $products

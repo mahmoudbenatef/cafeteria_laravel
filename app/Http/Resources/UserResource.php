@@ -22,7 +22,6 @@ class UserResource extends JsonResource
             'token'=>$this->token,
             'isAdmin'=>$this->isAdmin,
             'photo'=>$this->photo,
-
         ];
     }
 }
