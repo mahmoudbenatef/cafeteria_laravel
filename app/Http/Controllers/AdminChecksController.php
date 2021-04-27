@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,7 @@ class AdminChecksController extends Controller
         } else {
             $all_users = User::all(["id", "name"]);
         }
+
 
         foreach ($all_users as $user) {
             $totalAmount = $user->orders->sum('price');
