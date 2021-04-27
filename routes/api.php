@@ -33,5 +33,6 @@ Route::get('categoryLookup', [\App\Http\Controllers\CategoyController::class, 'l
 Route::apiResource('user', 'App\Http\Controllers\UserController');
 Route::get('user/{id}/orders', [\App\Http\Controllers\UserController::class, 'getMyOrders']);
 Route::get('user/{id}/orders/filter', [\App\Http\Controllers\UserController::class, 'getMyFilteredOrders']);
+Route::get('rooms', [\App\Http\Controllers\RoomController::class, 'displayAllRooms']);
 Route::get('checks', [\App\Http\Controllers\AdminChecksController::class, 'index']);
 Route::get('listAllProducts', [\App\Http\Controllers\ProductController::class, 'listAllProducts']);

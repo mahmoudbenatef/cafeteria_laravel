@@ -20,7 +20,10 @@ class CategoyController extends Controller
     }
     public function index()
     {
-        return Category::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => Category::orderBy('created_at', 'desc')->paginate(5)
+        ], 200);
     }
 
     /**
@@ -93,6 +96,5 @@ class CategoyController extends Controller
     {
         $categories = Category::all(['id', 'name']);
         return response()->json(['status' => "success", "data" => $categories], 200);
-
     }
 }

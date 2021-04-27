@@ -31,7 +31,6 @@ class OrderController extends Controller
         } else {
             return response()->json(['status' => "failed"], 400);
         }
-
     }
 
     /**
@@ -74,9 +73,7 @@ class OrderController extends Controller
             }
 
             return response()->json(['status' => "done", 'data' => "", "message" => $order], 200);
-
         }
-
     }
 
     /**
@@ -111,16 +108,13 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
 
-        $order->status = "delivered";
+        $order->status = $request->status;
 
         if ($order->update()) {
             return response()->json(['status' => "success", 'data' => "", "message" => "order updated successfully"], 200);
-
         } else {
             return response()->json(['status' => "Error", 'data' => "", "message" => "could not update order"], 500);
-
         }
-
     }
 
     /**

@@ -17,8 +17,8 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:sanctum")->except("getMyOrders","getMyFilteredOrders","index");
-        $this->middleware("admin")->except("getMyOrders","getMyFilteredOrders","index");
+        $this->middleware("auth:sanctum")->except("getMyOrders", "getMyFilteredOrders", "index");
+        $this->middleware("admin")->except("getMyOrders", "getMyFilteredOrders", "index");
     }
 
     public function index()
@@ -31,28 +31,32 @@ class UserController extends Controller
     public function destroy($id)
     {
 
-        dump($id) ; 
-        $user=User::where('id','=',$id)->first();
-        
-        
-            if ($user!=null&&$user->delete())
-            {
-                return response()->json(['status' => "success", "data"=> "ay haga"], 200);
-            }
-       
-            return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 401);  
-        
+        dump($id);
+        $user = User::where('id', '=', $id)->first();
+
+
+        if ($user != null && $user->delete()) {
+            return response()->json(['status' => "success", "data" => "ay haga"], 200);
+        }
+
+        return response()->json(['status' => "Error", 'data' => "", "message" => "something went wrong"], 401);
     }
 
     public function getMyOrders($id)
     {
         $orders = Order::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(5);
+        foreach ($orders as $order) {
+            $order['products'] = $order->products;
+        }
         return response()->json(['status' => "success", 'data' => $orders], 200);
     }
 
     public function getMyFilteredOrders(Request $request, $id)
     {
         $orders = Order::where('user_id', $id)->whereBetween('created_at', [$request->query('from'), $request->query('to')])->orderBy('created_at', 'desc')->paginate(5);
+        foreach ($orders as $order) {
+            $order['products'] = $order->products;
+        }
         return response()->json(['status' => 'success', 'data' => $orders], 200);
     }
 

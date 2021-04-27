@@ -7,7 +7,7 @@ use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class RoomController extends Controller
 {
@@ -20,7 +20,6 @@ class RoomController extends Controller
     {
         $this->middleware("auth:sanctum")->except("index");
         $this->middleware("admin")->except("index");
-
     }
 
     public function index()
@@ -46,18 +45,13 @@ class RoomController extends Controller
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 500);
-        }
-        else {
+        } else {
             $room = new Room();
             $room->number = $request->number;
-            if ($room->save())
-            {
-                return response()->json(['status' => "success", 'data' => $room, ], 200);
-            }
-            else
-            {
-                return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 500);
-
+            if ($room->save()) {
+                return response()->json(['status' => "success", 'data' => $room,], 200);
+            } else {
+                return response()->json(['status' => "Error", 'data' => "", "message" => "something went wrong"], 500);
             }
         }
 
@@ -74,21 +68,17 @@ class RoomController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'number' => 'integer|required|unique:rooms,number,'.$id  ,
+            'number' => 'integer|required|unique:rooms,number,' . $id,
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => "Error", 'data' => "", "message" => $validator->errors()], 500);
-        }
-        else {
-            $room =Room::find($id);
+        } else {
+            $room = Room::find($id);
             $room->number = $request->number;
-            if ($room->save())
-            {
+            if ($room->save()) {
                 return response()->json(['status' => "success", 'data' => $room], 200);
-            }
-            else
-            {
-                return response()->json(['status' => "Error", 'data' => "","message"=>"something went wrong"], 500);
+            } else {
+                return response()->json(['status' => "Error", 'data' => "", "message" => "something went wrong"], 500);
             }
         }
     }
@@ -101,7 +91,14 @@ class RoomController extends Controller
     public function destroy($id)
     {
         $users = DB::table('users')
-            ->where('room_id',$id)->count();
+            ->where('room_id', $id)->count();
         //
+    }
+
+    public function displayAllRooms()
+    {
+        $rooms = Room::orderBy('created_at', 'desc')->paginate(5);
+        // dd($rooms);
+        return response()->json(['status' => "success", 'data' => $rooms], 200);
     }
 }
