@@ -49,12 +49,16 @@ class ApiAuthController extends Controller
         //        }
         $file = $request->file('photo');
         $name = '/avatars/' . uniqid() . '.' . $file->extension();
+
         $file->storePubliclyAs('public', $name);
 
         $user->name = $input['name'];
         $user->ext = $input['ext'];
         $user->email = $input['email'];
-        $user->photo = $name;
+        
+
+        $user->photo = asset('storage' . ($name)); 
+
         $user->room_id = $input['room_id'];
         $user->password = Hash::make($input['password']);
         $user->save();
