@@ -7,6 +7,9 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use function Illuminate\Support\Facades\Hash;
+
 
 use Validator;
 
@@ -33,7 +36,6 @@ class UserController extends Controller
     public function destroy($id)
     {
 
-        dump($id) ; 
         $user=User::where('id','=',$id)->first();
         
         
@@ -60,14 +62,17 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        error_log('Some message here.');
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            // 'name' => 'string',
             //            'photo' => 'required',
-            'email' => 'required|unique:users,email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-            'ext' => 'required',
-            'room_id' => 'required',
+            // 'email' => 'string|unique:users,email',
+            
+            // 'password' => 'required',
+            // 'c_password' => 'required|same:password',
+            // 'ext' => 'string',
+            // 'room_id' => 'required',
         ]);
         // check validator
         if ($validator->fails()) {
@@ -78,18 +83,26 @@ class UserController extends Controller
         } else {
             if ($request->hasFile("photo")) {
                 $file = $request->file('photo');
+                error_log($file);
+
                 $name = 'users/' . uniqid() . '.' . $file->extension();
                 $file->storePubliclyAs('public', $name);
                 $user->photo =  asset('storage/' . ($name));
             }
             $user->name = $request->name ? $request->name : $user->name;
             $user->email = $request->email ? $request->email : $user->email;
-            $user->password = $request->password ? $request->password : $user->password;
+            $user->password = $request->password  ? Hash::make( $request->password) : $user->password;
             $user->ext = $request->ext ? $request->ext : $user->ext;
-          
+             $user->room_id = $request->room_id ? $request->room_id : $user->room_id;
+
+
+
+                    error_log($user);
 
             return $user->update() ?
-                response()->json(["status" => "success", "data" => $user], 200) :
+
+                response()->json(["status" => "success by kaoud", "data" => $user], 200) :
+                
                 response()->json(['status' => "error", "message" => "request failed"], 403);
         }
     }
