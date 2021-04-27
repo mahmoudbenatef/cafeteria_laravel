@@ -46,6 +46,9 @@ class SocialAuthController extends Controller
 
         }else{
             //already registered with that email 
+        $appUser->photo=$user->avatar;
+        $appUser->save();
+            
             $socialAcc=$appUser->socialAccounts()->where('provider',$provider);
             // dd("found");
             if(!$socialAcc){
@@ -57,6 +60,7 @@ class SocialAuthController extends Controller
             }
         }
          $appUser->token = $appUser->createToken($appUser->email)->plainTextToken;
-        return response()->json(['status' => "success", "message" => "user logged in successfully", "user" => new UserResource($appUser)], 200);       
+        return response()->json(['status' => "success", "message" => "user logged in successfully", "user" => new UserResource($appUser)], 200);
+        
     }
 }

@@ -25,7 +25,6 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/authorize/{provider}/redirect', [\App\Http\Controllers\SocialAuthController::class, 'redirectToProvider']);
     Route::get('/authorize/{provider}/callback', [\App\Http\Controllers\SocialAuthController::class, 'handleProviderCallback']);
 });
-
 Route::apiResource('room', 'App\Http\Controllers\RoomController');
 Route::apiResource('order', 'App\Http\Controllers\OrderController');
 Route::apiResource('product', 'App\Http\Controllers\ProductController');
